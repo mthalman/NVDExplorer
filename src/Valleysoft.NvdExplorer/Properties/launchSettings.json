@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Valleysoft.NvdExplorer": {
+        "commandName": "Project",
+        "commandLineArgs": "cve --limit 5 --cvss-v4 AV:A/AC:H/PR:H/UI:N"
+    }
+  }
+}

@@ -2,21 +2,21 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Valleysoft.Nvd.Client.CvssV30;
+namespace Valleysoft.Nvd.Client.CvssV40;
 
-public class CvssV30ScoreData
+public class CvssV40ScoreData
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("attackComplexity")]
     public AttackComplexityType? AttackComplexity { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("attackVector")]
-    public AttackVectorType? AttackVector { get; set; }
+    [JsonPropertyName("attackRequirements")]
+    public AttackRequirementsType? AttackRequirements { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("availabilityImpact")]
-    public AvailabilityImpactType? AvailabilityImpact { get; set; }
+    [JsonPropertyName("attackVector")]
+    public AttackVectorType? AttackVector { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("availabilityRequirement")]
@@ -28,10 +28,6 @@ public class CvssV30ScoreData
 
     [JsonPropertyName("baseSeverity")]
     public SeverityType BaseSeverity { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("confidentialityImpact")]
-    public AvailabilityImpactType? ConfidentialityImpact { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("confidentialityRequirement")]
@@ -47,14 +43,6 @@ public class CvssV30ScoreData
     public SeverityType? EnvironmentalSeverity { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("exploitCodeMaturity")]
-    public ExploitCodeMaturityType? ExploitCodeMaturity { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("integrityImpact")]
-    public AvailabilityImpactType? IntegrityImpact { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("integrityRequirement")]
     public CiaRequirementType? IntegrityRequirement { get; set; }
 
@@ -63,57 +51,48 @@ public class CvssV30ScoreData
     public ModifiedAttackComplexityType? ModifiedAttackComplexity { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("modifiedAttackRequirements")]
+    public ModifiedAttackRequirementsType? ModifiedAttackRequirements { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("modifiedAttackVector")]
     public ModifiedAttackVectorType? ModifiedAttackVector { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("modifiedAvailabilityImpact")]
-    public ModifiedType? ModifiedAvailabilityImpact { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("modifiedConfidentialityImpact")]
-    public ModifiedType? ModifiedConfidentialityImpact { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("modifiedIntegrityImpact")]
-    public ModifiedType? ModifiedIntegrityImpact { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("modifiedPrivilegesRequired")]
     public ModifiedType? ModifiedPrivilegesRequired { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("modifiedScope")]
-    public ModifiedScopeType? ModifiedScope { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("modifiedUserInteraction")]
     public ModifiedUserInteractionType? ModifiedUserInteraction { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("modifiedVulnConfidentialityImpact")]
+    public ModifiedVulnerabilityCiaType? ModifiedVulnerabilityConfidentialityImpact { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("modifiedVulnIntegrityImpact")]
+    public ModifiedVulnerabilityCiaType? ModifiedVulnerabilityIntegrityImpact { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("modifiedVulnAvailabilityImpact")]
+    public ModifiedVulnerabilityCiaType? ModifiedVulnerabilityAvailabilityImpact { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("modifiedSubConfidentialityImpact")]
+    public ModifiedSubCiaType? ModifiedSubConfidentialityImpact { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("modifiedSubIntegrityImpact")]
+    public ModifiedSubIaType? ModifiedSubIntegrityImpact { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("modifiedSubAvailabilityImpact")]
+    public ModifiedSubIaType? ModifiedSubAvailabilityImpact { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("privilegesRequired")]
     public AvailabilityImpactType? PrivilegesRequired { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("remediationLevel")]
-    public RemediationLevelType? RemediationLevel { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("reportConfidence")]
-    public ConfidenceType? ReportConfidence { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("scope")]
-    public ScopeType? Scope { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("temporalScore")]
-    [JsonConverter(typeof(MinMaxValueCheckConverter))]
-    public double? TemporalScore { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("temporalSeverity")]
-    public SeverityType? TemporalSeverity { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("userInteraction")]
@@ -121,6 +100,58 @@ public class CvssV30ScoreData
 
     [JsonPropertyName("vectorString")]
     public required string VectorString { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("vulnConfidentialityImpact")]
+    public VulnerabilityCiaType? VulnerabilityConfidentialityImpact { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("vulnIntegrityImpact")]
+    public VulnerabilityCiaType? VulnerabilityIntegrityImpact { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("vulnAvailabilityImpact")]
+    public VulnerabilityCiaType? VulnerabilityAvailabilityImpact { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("subConfidentialityImpact")]
+    public SubCiaType? SubConfidentialityImpact { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("subIntegrityImpact")]
+    public SubCiaType? SubIntegrityImpact { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("subAvailabilityImpact")]
+    public SubCiaType? SubAvailabilityImpact { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("exploitMaturity")]
+    public ExploitMaturityType? ExploitMaturity { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("Safety")]
+    public SafetyType? Safety { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("Automatable")]
+    public AutomatableType? Automatable { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("Recovery")]
+    public RecoveryType? Recovery { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("valueDensity")]
+    public ValueDensityType? ValueDensity { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("vulnerabilityResponseEffort")]
+    public VulnerabilityResponseEffortType? VulnerabilityResponseEffort { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("providerUrgency")]
+    public ProviderUrgencyType? ProviderUrgency { get; set; }
 
     /// <summary>
     /// CVSS Version

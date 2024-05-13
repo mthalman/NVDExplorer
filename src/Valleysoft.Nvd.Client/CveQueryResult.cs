@@ -42,6 +42,9 @@ public class Cve
     [JsonPropertyName("id")]
     public required string Id { get; set; }
 
+    [JsonPropertyName("cveTags")]
+    public CveTag[] Tags { get; set; } = [];
+
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("sourceIdentifier")]
     public string? SourceIdentifier { get; set; }
@@ -101,6 +104,15 @@ public class Cve
 
     [JsonPropertyName("vendorComments")]
     public VendorComment[] VendorComments { get; set; } = [];
+}
+
+public class CveTag
+{
+    [JsonPropertyName("sourceIdentifier")]
+    public required string Source { get; set; }
+
+    [JsonPropertyName("tags")]
+    public string[] Tags { get; set; } = [];
 }
 
 public class VendorComment
@@ -268,7 +280,7 @@ public class CvssV31Score
     public required ScoreType Type { get; set; }
 
     [JsonPropertyName("cvssData")]
-    public required CvssV31ScoreData CvssData { get; set; }
+    public required CvssV40ScoreData CvssData { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     [JsonPropertyName("exploitabilityScore")]
@@ -638,6 +650,41 @@ internal class AttackComplexityTypeConverter : JsonConverter<AttackComplexityTyp
     public static readonly AttackComplexityTypeConverter Singleton = new();
 }
 
+public enum AttackRequirementsType { None, Present };
+
+internal class AttackRequirementsTypeConverter : JsonConverter<AttackRequirementsType>
+{
+    public override bool CanConvert(Type t) => t == typeof(AttackRequirementsType);
+
+    public override AttackRequirementsType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        string? value = reader.GetString();
+        return value switch
+        {
+            "NONE" => AttackRequirementsType.None,
+            "PRESENT" => AttackRequirementsType.Present,
+            _ => throw new Exception("Cannot unmarshal type AttackRequirementsType"),
+        };
+    }
+
+    public override void Write(Utf8JsonWriter writer, AttackRequirementsType value, JsonSerializerOptions options)
+    {
+        switch (value)
+        {
+            case AttackRequirementsType.None:
+                JsonSerializer.Serialize(writer, "NONE", options);
+                return;
+            case AttackRequirementsType.Present:
+                JsonSerializer.Serialize(writer, "PRESENT", options);
+                return;
+            default:
+                throw new Exception("Cannot marshal type AttackRequirementsType");
+        }
+    }
+
+    public static readonly AttackRequirementsTypeConverter Singleton = new();
+}
+
 public enum AttackVectorType { AdjacentNetwork, Local, Network, Physical };
 
 internal class AttackVectorTypeConverter : JsonConverter<AttackVectorType>
@@ -681,35 +728,35 @@ internal class AttackVectorTypeConverter : JsonConverter<AttackVectorType>
     public static readonly AttackVectorTypeConverter Singleton = new();
 }
 
-public enum AvailabilityImpactEnum { High, Low, None };
+public enum AvailabilityImpactType { High, Low, None };
 
-internal class AvailabilityImpactEnumConverter : JsonConverter<AvailabilityImpactEnum>
+internal class AvailabilityImpactEnumConverter : JsonConverter<AvailabilityImpactType>
 {
-    public override bool CanConvert(Type t) => t == typeof(AvailabilityImpactEnum);
+    public override bool CanConvert(Type t) => t == typeof(AvailabilityImpactType);
 
-    public override AvailabilityImpactEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override AvailabilityImpactType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         string? value = reader.GetString();
         return value switch
         {
-            "HIGH" => AvailabilityImpactEnum.High,
-            "LOW" => AvailabilityImpactEnum.Low,
-            "NONE" => AvailabilityImpactEnum.None,
+            "HIGH" => AvailabilityImpactType.High,
+            "LOW" => AvailabilityImpactType.Low,
+            "NONE" => AvailabilityImpactType.None,
             _ => throw new Exception("Cannot unmarshal type AvailabilityImpactEnum"),
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, AvailabilityImpactEnum value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, AvailabilityImpactType value, JsonSerializerOptions options)
     {
         switch (value)
         {
-            case AvailabilityImpactEnum.High:
+            case AvailabilityImpactType.High:
                 JsonSerializer.Serialize(writer, "HIGH", options);
                 return;
-            case AvailabilityImpactEnum.Low:
+            case AvailabilityImpactType.Low:
                 JsonSerializer.Serialize(writer, "LOW", options);
                 return;
-            case AvailabilityImpactEnum.None:
+            case AvailabilityImpactType.None:
                 JsonSerializer.Serialize(writer, "NONE", options);
                 return;
             default:
@@ -848,6 +895,45 @@ internal class ModifiedAttackComplexityTypeConverter : JsonConverter<ModifiedAtt
                 return;
             default:
                 throw new Exception("Cannot marshal type ModifiedAttackComplexityType");
+        }
+    }
+
+    public static readonly ModifiedAttackComplexityTypeConverter Singleton = new();
+}
+
+public enum ModifiedAttackRequirementsType { None, Present, NotDefined };
+
+internal class ModifiedAttackRequirementsTypeConverter : JsonConverter<ModifiedAttackRequirementsType>
+{
+    public override bool CanConvert(Type t) => t == typeof(ModifiedAttackRequirementsType);
+
+    public override ModifiedAttackRequirementsType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        string? value = reader.GetString();
+        return value switch
+        {
+            "NONE" => ModifiedAttackRequirementsType.None,
+            "PRESENT" => ModifiedAttackRequirementsType.Present,
+            "NOT_DEFINED" => ModifiedAttackRequirementsType.NotDefined,
+            _ => throw new Exception("Cannot unmarshal type ModifiedAttackRequirementsType"),
+        };
+    }
+
+    public override void Write(Utf8JsonWriter writer, ModifiedAttackRequirementsType value, JsonSerializerOptions options)
+    {
+        switch (value)
+        {
+            case ModifiedAttackRequirementsType.None:
+                JsonSerializer.Serialize(writer, "NONE", options);
+                return;
+            case ModifiedAttackRequirementsType.Present:
+                JsonSerializer.Serialize(writer, "PRESENT", options);
+                return;
+            case ModifiedAttackRequirementsType.NotDefined:
+                JsonSerializer.Serialize(writer, "NOT_DEFINED", options);
+                return;
+            default:
+                throw new Exception("Cannot marshal type ModifiedAttackRequirementsType");
         }
     }
 
@@ -1063,6 +1149,510 @@ internal class ConfidenceTypeConverter : JsonConverter<ConfidenceType>
     }
 
     public static readonly ConfidenceTypeConverter Singleton = new();
+}
+
+public enum VulnerabilityCiaType { None, Low, High };
+
+internal class VulnerabilityCiaTypeConverter : JsonConverter<VulnerabilityCiaType>
+{
+    public override bool CanConvert(Type t) => t == typeof(VulnerabilityCiaType);
+
+    public override VulnerabilityCiaType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        string? value = reader.GetString();
+        return value switch
+        {
+            "NONE" => VulnerabilityCiaType.None,
+            "LOW" => VulnerabilityCiaType.Low,
+            "HIGH" => VulnerabilityCiaType.High,
+            _ => throw new Exception("Cannot unmarshal type VulnerabilityCiaType"),
+        };
+    }
+
+    public override void Write(Utf8JsonWriter writer, VulnerabilityCiaType value, JsonSerializerOptions options)
+    {
+        switch (value)
+        {
+            case VulnerabilityCiaType.None:
+                JsonSerializer.Serialize(writer, "NONE", options);
+                return;
+            case VulnerabilityCiaType.Low:
+                JsonSerializer.Serialize(writer, "LOW", options);
+                return;
+            case VulnerabilityCiaType.High:
+                JsonSerializer.Serialize(writer, "HIGH", options);
+                return;
+            default:
+                throw new Exception("Cannot marshal type VulnerabilityCiaType");
+        }
+    }
+
+    public static readonly VulnerabilityCiaTypeConverter Singleton = new();
+}
+
+public enum ModifiedVulnerabilityCiaType { None, Low, High, NotDefined };
+
+internal class ModifiedVulnerabilityCiaTypeConverter : JsonConverter<ModifiedVulnerabilityCiaType>
+{
+    public override bool CanConvert(Type t) => t == typeof(ModifiedVulnerabilityCiaType);
+
+    public override ModifiedVulnerabilityCiaType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        string? value = reader.GetString();
+        return value switch
+        {
+            "NONE" => ModifiedVulnerabilityCiaType.None,
+            "LOW" => ModifiedVulnerabilityCiaType.Low,
+            "HIGH" => ModifiedVulnerabilityCiaType.High,
+            "NOT_DEFINED" => ModifiedVulnerabilityCiaType.NotDefined,
+            _ => throw new Exception("Cannot unmarshal type ModifiedVulnerabilityCiaType"),
+        };
+    }
+
+    public override void Write(Utf8JsonWriter writer, ModifiedVulnerabilityCiaType value, JsonSerializerOptions options)
+    {
+        switch (value)
+        {
+            case ModifiedVulnerabilityCiaType.None:
+                JsonSerializer.Serialize(writer, "NONE", options);
+                return;
+            case ModifiedVulnerabilityCiaType.Low:
+                JsonSerializer.Serialize(writer, "LOW", options);
+                return;
+            case ModifiedVulnerabilityCiaType.High:
+                JsonSerializer.Serialize(writer, "HIGH", options);
+                return;
+            case ModifiedVulnerabilityCiaType.NotDefined:
+                JsonSerializer.Serialize(writer, "NOT_DEFINED", options);
+                return;
+            default:
+                throw new Exception("Cannot marshal type ModifiedVulnerabilityCiaType");
+        }
+    }
+
+    public static readonly ModifiedVulnerabilityCiaTypeConverter Singleton = new();
+}
+
+public enum SubCiaType { None, Low, High };
+
+internal class SubCiaTypeConverter : JsonConverter<SubCiaType>
+{
+    public override bool CanConvert(Type t) => t == typeof(SubCiaType);
+
+    public override SubCiaType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        string? value = reader.GetString();
+        return value switch
+        {
+            "NONE" => SubCiaType.None,
+            "LOW" => SubCiaType.Low,
+            "HIGH" => SubCiaType.High,
+            _ => throw new Exception("Cannot unmarshal type SubCiaType"),
+        };
+    }
+
+    public override void Write(Utf8JsonWriter writer, SubCiaType value, JsonSerializerOptions options)
+    {
+        switch (value)
+        {
+            case SubCiaType.None:
+                JsonSerializer.Serialize(writer, "NONE", options);
+                return;
+            case SubCiaType.Low:
+                JsonSerializer.Serialize(writer, "LOW", options);
+                return;
+            case SubCiaType.High:
+                JsonSerializer.Serialize(writer, "HIGH", options);
+                return;
+            default:
+                throw new Exception("Cannot marshal type SubCiaType");
+        }
+    }
+
+    public static readonly SubCiaTypeConverter Singleton = new();
+}
+
+public enum ModifiedSubCiaType { Negligible, Low, High, NotDefined };
+
+internal class ModifiedSubCiaTypeConverter : JsonConverter<ModifiedSubCiaType>
+{
+    public override bool CanConvert(Type t) => t == typeof(ModifiedSubCiaType);
+
+    public override ModifiedSubCiaType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        string? value = reader.GetString();
+        return value switch
+        {
+            "NEGLIGIBLE" => ModifiedSubCiaType.Negligible,
+            "LOW" => ModifiedSubCiaType.Low,
+            "HIGH" => ModifiedSubCiaType.High,
+            "NOT_DEFINED" => ModifiedSubCiaType.NotDefined,
+            _ => throw new Exception("Cannot unmarshal type ModifiedSubCiaType"),
+        };
+    }
+
+    public override void Write(Utf8JsonWriter writer, ModifiedSubCiaType value, JsonSerializerOptions options)
+    {
+        switch (value)
+        {
+            case ModifiedSubCiaType.Negligible:
+                JsonSerializer.Serialize(writer, "NEGLIGIBLE", options);
+                return;
+            case ModifiedSubCiaType.Low:
+                JsonSerializer.Serialize(writer, "LOW", options);
+                return;
+            case ModifiedSubCiaType.High:
+                JsonSerializer.Serialize(writer, "HIGH", options);
+                return;
+            case ModifiedSubCiaType.NotDefined:
+                JsonSerializer.Serialize(writer, "NOT_DEFINED", options);
+                return;
+            default:
+                throw new Exception("Cannot marshal type ModifiedSubCiaType");
+        }
+    }
+
+    public static readonly ModifiedSubCiaTypeConverter Singleton = new();
+}
+
+public enum ModifiedSubIaType { Negligible, Low, High, Safety, NotDefined };
+
+internal class ModifiedSubIaTypeConverter : JsonConverter<ModifiedSubIaType>
+{
+    public override bool CanConvert(Type t) => t == typeof(ModifiedSubIaType);
+
+    public override ModifiedSubIaType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        string? value = reader.GetString();
+        return value switch
+        {
+            "NEGLIGIBLE" => ModifiedSubIaType.Negligible,
+            "LOW" => ModifiedSubIaType.Low,
+            "HIGH" => ModifiedSubIaType.High,
+            "SAFETY" => ModifiedSubIaType.Safety,
+            "NOT_DEFINED" => ModifiedSubIaType.NotDefined,
+            _ => throw new Exception("Cannot unmarshal type ModifiedSubIaType"),
+        };
+    }
+
+    public override void Write(Utf8JsonWriter writer, ModifiedSubIaType value, JsonSerializerOptions options)
+    {
+        switch (value)
+        {
+            case ModifiedSubIaType.Negligible:
+                JsonSerializer.Serialize(writer, "NEGLIGIBLE", options);
+                return;
+            case ModifiedSubIaType.Low:
+                JsonSerializer.Serialize(writer, "LOW", options);
+                return;
+            case ModifiedSubIaType.High:
+                JsonSerializer.Serialize(writer, "HIGH", options);
+                return;
+            case ModifiedSubIaType.Safety:
+                JsonSerializer.Serialize(writer, "SAFETY", options);
+                return;
+            case ModifiedSubIaType.NotDefined:
+                JsonSerializer.Serialize(writer, "NOT_DEFINED", options);
+                return;
+            default:
+                throw new Exception("Cannot marshal type ModifiedSubIaType");
+        }
+    }
+
+    public static readonly ModifiedSubIaTypeConverter Singleton = new();
+}
+
+public enum ExploitMaturityType { Unreported, ProofOfConcept, Attacked, NotDefined };
+
+internal class ExploitMaturityTypeConverter : JsonConverter<ExploitMaturityType>
+{
+    public override bool CanConvert(Type t) => t == typeof(ExploitMaturityType);
+
+    public override ExploitMaturityType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        string? value = reader.GetString();
+        return value switch
+        {
+            "UNREPORTED" => ExploitMaturityType.Unreported,
+            "PROOF_OF_CONCEPT" => ExploitMaturityType.ProofOfConcept,
+            "ATTACKED" => ExploitMaturityType.Attacked,
+            "NOT_DEFINED" => ExploitMaturityType.NotDefined,
+            _ => throw new Exception("Cannot unmarshal type ExploitMaturityType"),
+        };
+    }
+
+    public override void Write(Utf8JsonWriter writer, ExploitMaturityType value, JsonSerializerOptions options)
+    {
+        switch (value)
+        {
+            case ExploitMaturityType.Unreported:
+                JsonSerializer.Serialize(writer, "UNREPORTED", options);
+                return;
+            case ExploitMaturityType.ProofOfConcept:
+                JsonSerializer.Serialize(writer, "PROOF_OF_CONCEPT", options);
+                return;
+            case ExploitMaturityType.Attacked:
+                JsonSerializer.Serialize(writer, "ATTACKED", options);
+                return;
+            case ExploitMaturityType.NotDefined:
+                JsonSerializer.Serialize(writer, "NOT_DEFINED", options);
+                return;
+            default:
+                throw new Exception("Cannot marshal type ExploitMaturityType");
+        }
+    }
+
+    public static readonly ExploitMaturityTypeConverter Singleton = new();
+}
+
+public enum SafetyType { Negligible, Present, NotDefined };
+
+internal class SafetyTypeConverter : JsonConverter<SafetyType>
+{
+    public override bool CanConvert(Type t) => t == typeof(SafetyType);
+
+    public override SafetyType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        string? value = reader.GetString();
+        return value switch
+        {
+            "NEGLIGIBLE" => SafetyType.Negligible,
+            "PRESENT" => SafetyType.Present,
+            "NOT_DEFINED" => SafetyType.NotDefined,
+            _ => throw new Exception("Cannot unmarshal type SafetyType"),
+        };
+    }
+
+    public override void Write(Utf8JsonWriter writer, SafetyType value, JsonSerializerOptions options)
+    {
+        switch (value)
+        {
+            case SafetyType.Negligible:
+                JsonSerializer.Serialize(writer, "NEGLIGIBLE", options);
+                return;
+            case SafetyType.Present:
+                JsonSerializer.Serialize(writer, "PRESENT", options);
+                return;
+            case SafetyType.NotDefined:
+                JsonSerializer.Serialize(writer, "NOT_DEFINED", options);
+                return;
+            default:
+                throw new Exception("Cannot marshal type SafetyType");
+        }
+    }
+
+    public static readonly SafetyTypeConverter Singleton = new();
+}
+
+public enum AutomatableType { NotDefined, No, Yes};
+
+internal class AutomatableTypeConverter : JsonConverter<AutomatableType>
+{
+    public override bool CanConvert(Type t) => t == typeof(AutomatableType);
+
+    public override AutomatableType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        string? value = reader.GetString();
+        return value switch
+        {
+            "NO" => AutomatableType.No,
+            "YES" => AutomatableType.Yes,
+            "NOT_DEFINED" => AutomatableType.NotDefined,
+            _ => throw new Exception("Cannot unmarshal type AutomatableType"),
+        };
+    }
+
+    public override void Write(Utf8JsonWriter writer, AutomatableType value, JsonSerializerOptions options)
+    {
+        switch (value)
+        {
+            case AutomatableType.No:
+                JsonSerializer.Serialize(writer, "NO", options);
+                return;
+            case AutomatableType.Yes:
+                JsonSerializer.Serialize(writer, "YES", options);
+                return;
+            case AutomatableType.NotDefined:
+                JsonSerializer.Serialize(writer, "NOT_DEFINED", options);
+                return;
+            default:
+                throw new Exception("Cannot marshal type AutomatableType");
+        }
+    }
+
+    public static readonly AutomatableTypeConverter Singleton = new();
+}
+
+public enum RecoveryType { NotDefined, Automatic, User, Irrecoverable };
+
+internal class RecoveryTypeConverter : JsonConverter<RecoveryType>
+{
+    public override bool CanConvert(Type t) => t == typeof(RecoveryType);
+
+    public override RecoveryType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        string? value = reader.GetString();
+        return value switch
+        {
+            "AUTOMATIC" => RecoveryType.Automatic,
+            "USER" => RecoveryType.User,
+            "IRRECOVERABLE" => RecoveryType.Irrecoverable,
+            "NOT_DEFINED" => RecoveryType.NotDefined,
+            _ => throw new Exception("Cannot unmarshal type RecoveryType"),
+        };
+    }
+
+    public override void Write(Utf8JsonWriter writer, RecoveryType value, JsonSerializerOptions options)
+    {
+        switch (value)
+        {
+            case RecoveryType.Automatic:
+                JsonSerializer.Serialize(writer, "AUTOMATIC", options);
+                return;
+            case RecoveryType.User:
+                JsonSerializer.Serialize(writer, "USER", options);
+                return;
+            case RecoveryType.Irrecoverable:
+                JsonSerializer.Serialize(writer, "IRRECOVERABLE", options);
+                return;
+            case RecoveryType.NotDefined:
+                JsonSerializer.Serialize(writer, "NOT_DEFINED", options);
+                return;
+            default:
+                throw new Exception("Cannot marshal type RecoveryType");
+        }
+    }
+
+    public static readonly RecoveryTypeConverter Singleton = new();
+}
+
+public enum ValueDensityType { NotDefined, Diffuse, Concentrated };
+
+internal class ValueDensityTypeConverter : JsonConverter<ValueDensityType>
+{
+    public override bool CanConvert(Type t) => t == typeof(ValueDensityType);
+
+    public override ValueDensityType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        string? value = reader.GetString();
+        return value switch
+        {
+            "DIFFUSE" => ValueDensityType.Diffuse,
+            "CONCENTRATED" => ValueDensityType.Concentrated,
+            "NOT_DEFINED" => ValueDensityType.NotDefined,
+            _ => throw new Exception("Cannot unmarshal type ValueDensityType"),
+        };
+    }
+
+    public override void Write(Utf8JsonWriter writer, ValueDensityType value, JsonSerializerOptions options)
+    {
+        switch (value)
+        {
+            case ValueDensityType.Diffuse:
+                JsonSerializer.Serialize(writer, "DIFFUSE", options);
+                return;
+            case ValueDensityType.Concentrated:
+                JsonSerializer.Serialize(writer, "CONCENTRATED", options);
+                return;
+            case ValueDensityType.NotDefined:
+                JsonSerializer.Serialize(writer, "NOT_DEFINED", options);
+                return;
+            default:
+                throw new Exception("Cannot marshal type ValueDensityType");
+        }
+    }
+
+    public static readonly ValueDensityTypeConverter Singleton = new();
+}
+
+public enum VulnerabilityResponseEffortType { NotDefined, Low, Moderate, High };
+
+internal class VulnerabilityResponseEffortTypeConverter : JsonConverter<VulnerabilityResponseEffortType>
+{
+    public override bool CanConvert(Type t) => t == typeof(VulnerabilityResponseEffortType);
+
+    public override VulnerabilityResponseEffortType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        string? value = reader.GetString();
+        return value switch
+        {
+            "LOW" => VulnerabilityResponseEffortType.Low,
+            "MODERATE" => VulnerabilityResponseEffortType.Moderate,
+            "HIGH" => VulnerabilityResponseEffortType.High,
+            "NOT_DEFINED" => VulnerabilityResponseEffortType.NotDefined,
+            _ => throw new Exception("Cannot unmarshal type VulnerabilityResponseEffortType"),
+        };
+    }
+
+    public override void Write(Utf8JsonWriter writer, VulnerabilityResponseEffortType value, JsonSerializerOptions options)
+    {
+        switch (value)
+        {
+            case VulnerabilityResponseEffortType.Low:
+                JsonSerializer.Serialize(writer, "LOW", options);
+                return;
+            case VulnerabilityResponseEffortType.Moderate:
+                JsonSerializer.Serialize(writer, "MODERATE", options);
+                return;
+            case VulnerabilityResponseEffortType.High:
+                JsonSerializer.Serialize(writer, "HIGH", options);
+                return;
+            case VulnerabilityResponseEffortType.NotDefined:
+                JsonSerializer.Serialize(writer, "NOT_DEFINED", options);
+                return;
+            default:
+                throw new Exception("Cannot marshal type VulnerabilityResponseEffortType");
+        }
+    }
+
+    public static readonly VulnerabilityResponseEffortTypeConverter Singleton = new();
+}
+
+public enum ProviderUrgencyType { NotDefined, Clear, Green, Amber, Red };
+
+internal class ProviderUrgencyTypeConverter : JsonConverter<ProviderUrgencyType>
+{
+    public override bool CanConvert(Type t) => t == typeof(ProviderUrgencyType);
+
+    public override ProviderUrgencyType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        string? value = reader.GetString();
+        return value switch
+        {
+            "CLEAR" => ProviderUrgencyType.Clear,
+            "GREEN" => ProviderUrgencyType.Green,
+            "AMBER" => ProviderUrgencyType.Amber,
+            "RED" => ProviderUrgencyType.Red,
+            "NOT_DEFINED" => ProviderUrgencyType.NotDefined,
+            _ => throw new Exception("Cannot unmarshal type ProviderUrgencyType"),
+        };
+    }
+
+    public override void Write(Utf8JsonWriter writer, ProviderUrgencyType value, JsonSerializerOptions options)
+    {
+        switch (value)
+        {
+            case ProviderUrgencyType.Clear:
+                JsonSerializer.Serialize(writer, "CLEAR", options);
+                return;
+            case ProviderUrgencyType.Green:
+                JsonSerializer.Serialize(writer, "GREEN", options);
+                return;
+            case ProviderUrgencyType.Amber:
+                JsonSerializer.Serialize(writer, "AMBER", options);
+                return;
+            case ProviderUrgencyType.Red:
+                JsonSerializer.Serialize(writer, "RED", options);
+                return;
+            case ProviderUrgencyType.NotDefined:
+                JsonSerializer.Serialize(writer, "NOT_DEFINED", options);
+                return;
+            default:
+                throw new Exception("Cannot marshal type ProviderUrgencyType");
+        }
+    }
+
+    public static readonly ProviderUrgencyTypeConverter Singleton = new();
 }
 
 public enum ScopeType { Changed, Unchanged };
