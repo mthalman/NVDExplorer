@@ -1,4 +1,5 @@
-﻿using System.CommandLine;
+﻿using System.Collections.Generic;
+using System.CommandLine;
 using System.CommandLine.Parsing;
 using System.Diagnostics.CodeAnalysis;
 
@@ -6,9 +7,21 @@ namespace Valleysoft.NvdExplorer.Commands;
 
 public abstract class OptionsBase
 {
+    private readonly Option<OutputFormat> _outputFormatOption;
+    private readonly Option<int?> _limitOption;
     private readonly List<Argument> _arguments = [];
     private readonly List<Option> _options = [];
     private ParseResult? _parseResult;
+
+    protected OptionsBase()
+    {
+        _outputFormatOption = Add(new Option<OutputFormat>("--format", () => OutputFormat.Simple, "Set the format of the output"));
+        _limitOption = Add(new Option<int?>("--limit", "Maximum number of CVEs to include in the result"));
+    }
+
+    public OutputFormat OutputFormat { get; set; } = OutputFormat.Simple;
+
+    public int? Limit { get; set; }
 
     protected Argument<T> Add<T>(Argument<T> argument)
     {
@@ -49,7 +62,11 @@ public abstract class OptionsBase
         GetValues();
     }
 
-    protected abstract void GetValues();
+    protected virtual void GetValues()
+    {
+        OutputFormat = GetValue(_outputFormatOption);
+        Limit = GetValue(_limitOption);
+    }
 
     public void SetCommandOptions(Command cmd)
     {
@@ -63,5 +80,11 @@ public abstract class OptionsBase
             cmd.AddOption(option);
         }
     }
+}
+
+public enum OutputFormat
+{
+    Simple,
+    Json
 }
 
