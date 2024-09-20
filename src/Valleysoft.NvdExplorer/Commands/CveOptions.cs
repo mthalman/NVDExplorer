@@ -1,5 +1,4 @@
 ﻿using System.CommandLine;
-using System.Runtime.CompilerServices;
 using Valleysoft.Nvd.Client;
 
 namespace Valleysoft.NvdExplorer.Commands;
@@ -24,8 +23,6 @@ internal class CveOptions : OptionsBase
     private readonly Option<bool> _isVulnerableOption;
     private readonly Option<string> _keywordSearchOption;
     private readonly Option<bool> _keywordExactMatchOption;
-
-    public int? Limit { get; set; }
 
     public string? Cpe { get; set; }
 
@@ -65,8 +62,6 @@ internal class CveOptions : OptionsBase
         const string CpeOptionName = "--cpe";
         const string KeywordsOptionName = "--keywords";
 
-
-        _limitOption = Add(new Option<int?>("--limit", "Maximum number of CVEs to include in the result"));
         _cpeOption = Add(new Option<string?>(CpeOptionName, "Returns CVEs associated with a specific Common Platform Enumeration (CPE) name"));
         _idOption = Add(new Option<string?>("--cve", "Returns a CVE by its CVE ID"));
         _tagOption = Add(new Option<string?>("--tag", "Returns CVEs that include the provided tag"));
@@ -88,7 +83,7 @@ internal class CveOptions : OptionsBase
 
     protected override void GetValues()
     {
-        Limit = GetValue(_limitOption);
+        base.GetValues();
         Cpe = GetValue(_cpeOption);
         Id = GetValue(_idOption);
         Tag = GetValue(_tagOption);

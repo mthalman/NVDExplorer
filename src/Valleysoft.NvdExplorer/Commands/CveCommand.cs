@@ -52,6 +52,32 @@ internal class CveCommand(NvdClient client, IConsole console) : CommandWithOptio
             
         } while (totalReturnedCount < result.TotalResults && totalReturnedCount < Options.Limit);
 
+        switch (Options.OutputFormat)
+        {
+            case OutputFormat.Simple:
+                OutputSimple(vulnerabilities);
+                break;
+            case OutputFormat.Json:
+                OutputJson(vulnerabilities);
+                break;
+            default:
+                throw new NotImplementedException();
+        }
+    }
+
+    private void OutputSimple(List<Cve> vulnerabilities)
+    {
+        foreach (var vuln in vulnerabilities)
+        {
+            _console.WriteLine($"CVE:         {vuln.Id}");
+            _console.WriteLine($"Description: {OutputHelper.GetValueForCurrentCulture(vuln.Descriptions)}");
+            _console.WriteLine($"Published:   {OutputHelper.FormatDate(vuln.Published)}");
+            _console.WriteLine(string.Empty);
+        }
+    }
+
+    private void OutputJson(List<Cve> vulnerabilities)
+    {
         string json = JsonSerializer.Serialize(vulnerabilities, _options);
         _console.WriteLine(json);
     }

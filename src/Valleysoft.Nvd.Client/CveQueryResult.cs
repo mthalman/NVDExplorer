@@ -7,26 +7,8 @@ using Valleysoft.Nvd.Client.CvssV31;
 
 namespace Valleysoft.Nvd.Client;
 
-public class CveQueryResult
+public class CveQueryResult : QueryResult
 {
-    [JsonPropertyName("resultsPerPage")]
-    public required int ResultsPerPage { get; set; }
-
-    [JsonPropertyName("startIndex")]
-    public required int StartIndex { get; set; }
-
-    [JsonPropertyName("totalResults")]
-    public required int TotalResults { get; set; }
-
-    [JsonPropertyName("format")]
-    public required string Format { get; set; }
-
-    [JsonPropertyName("version")]
-    public required string Version { get; set; }
-
-    [JsonPropertyName("timestamp")]
-    public required DateTimeOffset Timestamp { get; set; }
-
     [JsonPropertyName("vulnerabilities")]
     public required Vulnerability[] Vulnerabilities { get; set; } = [];
 }
@@ -88,7 +70,7 @@ public class Cve
     public string? CisaVulnerabilityName { get; set; }
 
     [JsonPropertyName("descriptions")]
-    public required LanguageString[] Descriptions { get; set; } = [];
+    public required LanguageValue[] Descriptions { get; set; } = [];
 
     [JsonPropertyName("references")]
     public required Reference[] References { get; set; } = [];
@@ -194,10 +176,10 @@ public class Weakness
     public required string Type { get; set; }
 
     [JsonPropertyName("description")]
-    public required LanguageString[] Description { get; set; } = [];
+    public required LanguageValue[] Description { get; set; } = [];
 }
 
-public class LanguageString
+public class LanguageValue : ILanguageValue
 {
     [JsonPropertyName("lang")]
     public required string Language { get; set; }

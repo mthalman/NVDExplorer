@@ -9,6 +9,39 @@ public class NvdClient(HttpClient httpClient, string? apiKey = null)
     private readonly HttpClient _httpClient = httpClient;
     private readonly string? _apiKey = apiKey;
 
+    public async Task<CpeQueryResult> GetCpesAsync(CpeQueryFilter filter, CancellationToken cancellationToken = default)
+    {
+        List<string> uriParams = [];
+
+        if (filter.ResultsPerPage is not null)
+        {
+            uriParams.Add($"resultsPerPage={filter.ResultsPerPage}");
+        }
+
+        if (filter.StartIndex is not null)
+        {
+            uriParams.Add($"startIndex={filter.StartIndex}");
+        }
+
+        if (filter.Keywords is not null)
+        {
+            uriParams.Add($"keywordSearch={filter.Keywords}");
+        }
+
+        string uriParamsStr = string.Join('&', uriParams);
+
+        string url = $"https://services.nvd.nist.gov/rest/json/cpes/2.0?{uriParamsStr}";
+        HttpRequestMessage request = new(HttpMethod.Get, url);
+        if (_apiKey is not null)
+        {
+            request.Headers.Add("apiKey", _apiKey);
+        }
+        HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken);
+        response.EnsureSuccessStatusCode();
+        CpeQueryResult? result = await response.Content.ReadFromJsonAsync<CpeQueryResult>(Converter.Settings, cancellationToken: cancellationToken);
+        return result ?? throw new InvalidOperationException("Unable to deserialize the CVE query result.");
+    }
+
     public async Task<CveQueryResult> GetCvesAsync(CveQueryFilter filter, CancellationToken cancellationToken = default)
     {
         List<string> uriParams = [];
