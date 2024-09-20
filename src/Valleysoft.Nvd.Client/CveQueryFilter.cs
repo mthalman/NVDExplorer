@@ -4,11 +4,14 @@ public class CveQueryFilter
 {
     public string? CpeName { get; set; }
     public string? CveId { get; set; }
+    public string? CveTag { get; set; }
     public string? CweId { get; set; }
     public string? CvssV2Metrics { get; set; }
     public string? CvssV3Metrics { get; set; }
+    public string? CvssV4Metrics { get; set; }
     public CvssV2Severity? CvssV2Severity { get; set; }
     public CvssV3Severity? CvssV3Severity { get; set; }
+    public CvssV4Severity? CvssV4Severity { get; set; }
     public bool HasCertAlerts { get; set; }
     public bool HasCertNotes { get; set; }
     public bool HasKev { get; set; }
@@ -27,16 +30,43 @@ public class CveQueryFilter
 
 public enum CvssV2Severity
 {
+    [NvdName("LOW")]
     Low,
+
+    [NvdName("MEDIUM")]
     Medium,
+
+    [NvdName("HIGH")]
     High
 }
 
 public enum CvssV3Severity
 {
+    [NvdName("LOW")]
     Low,
+
+    [NvdName("MEDIUM")]
     Medium,
+
+    [NvdName("HIGH")]
     High,
+
+    [NvdName("CRITICAL")]
+    Critical
+}
+
+public enum CvssV4Severity
+{
+    [NvdName("LOW")]
+    Low,
+
+    [NvdName("MEDIUM")]
+    Medium,
+
+    [NvdName("HIGH")]
+    High,
+
+    [NvdName("CRITICAL")]
     Critical
 }
 
@@ -61,6 +91,9 @@ public class VirtualMatchVersion(string version, VirtualMatchVersionType type)
 
 public enum VirtualMatchVersionType
 {
+    [NvdName("including")]
     Include,
+
+    [NvdName("excluding")]
     Exclude
 }

@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Valleysoft.Nvd.Client.CvssV31;
 
-public partial class CvssV31ScoreData
+public class CvssV40ScoreData
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("attackComplexity")]
@@ -16,7 +16,7 @@ public partial class CvssV31ScoreData
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("availabilityImpact")]
-    public AvailabilityImpactEnum? AvailabilityImpact { get; set; }
+    public AvailabilityImpactType? AvailabilityImpact { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("availabilityRequirement")]
@@ -31,7 +31,7 @@ public partial class CvssV31ScoreData
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("confidentialityImpact")]
-    public AvailabilityImpactEnum? ConfidentialityImpact { get; set; }
+    public AvailabilityImpactType? ConfidentialityImpact { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("confidentialityRequirement")]
@@ -52,7 +52,7 @@ public partial class CvssV31ScoreData
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("integrityImpact")]
-    public AvailabilityImpactEnum? IntegrityImpact { get; set; }
+    public AvailabilityImpactType? IntegrityImpact { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("integrityRequirement")]
@@ -92,7 +92,7 @@ public partial class CvssV31ScoreData
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("privilegesRequired")]
-    public AvailabilityImpactEnum? PrivilegesRequired { get; set; }
+    public AvailabilityImpactType? PrivilegesRequired { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("remediationLevel")]

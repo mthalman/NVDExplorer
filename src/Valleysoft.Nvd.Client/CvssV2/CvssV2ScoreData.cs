@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Globalization;
 
 namespace Valleysoft.Nvd.Client.CvssV2;
 
-public partial class CvssV2ScoreData
+public class CvssV2ScoreData
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("accessComplexity")]

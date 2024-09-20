@@ -1,10 +1,16 @@
-﻿using Valleysoft.Nvd.Client;
+﻿using System.CommandLine;
+using System.CommandLine.IO;
+using Valleysoft.Nvd.Client;
+using Valleysoft.NvdExplorer.Commands;
 
-string apiKey = "<api-key>";
+string? apiKey = Environment.GetEnvironmentVariable("NVD_EXPLORER_API_KEY");
 
-string cveId = "<cve>";
-using HttpClient client = new();
-NvdClient nvdClient = new(client, apiKey);
-CveQueryResult cveQueryResult = await nvdClient.GetCves(new CveQueryFilter { CveId = cveId });
-SeverityType severity = cveQueryResult.Vulnerabilities.First().Cve.Metrics!.CvssMetricV31.First().CvssData.BaseSeverity;
-Console.WriteLine($"{cveId}: {severity}");
+NvdClient client = new(new HttpClient(), apiKey);
+SystemConsole console = new();
+
+RootCommand rootCommand = new("CLI for querying National Vulnerability Database (NVD)")
+{
+    new CveCommand(client, console)
+};
+
+return rootCommand.Invoke(args);
