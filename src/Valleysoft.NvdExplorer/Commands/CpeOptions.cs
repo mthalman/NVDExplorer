@@ -16,7 +16,7 @@ internal class CpeOptions : OptionsBase
     {
         const string KeywordsOptionName = "--keywords";
 
-        _keywordSearchOption = Add(new Option<string>(KeywordsOptionName, "Returns CVEs that contain the provided keywords in the description"));
+        _keywordSearchOption = Add(new Option<string>(KeywordsOptionName, "Returns CPEs that contain the provided keywords in the description"));
         _keywordExactMatchOption = Add(new Option<bool>("--exact-match", $"Modifies the keyword search to find an exact match (must be used with {KeywordsOptionName})"));
     }
 

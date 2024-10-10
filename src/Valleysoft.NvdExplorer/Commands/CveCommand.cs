@@ -4,7 +4,7 @@ using Valleysoft.Nvd.Client;
 
 namespace Valleysoft.NvdExplorer.Commands;
 
-internal class CveCommand(NvdClient client, IConsole console) : CommandWithOptions<CveOptions>("cve", "Queries for one or more CVEs")
+internal class CveCommand(NvdClient client, IConsole console) : CommandWithOptions<CveOptions>("cve", "Queries the Common Vulnerabilities and Exposures (CVE) database")
 {
     private const int MaxResultsPerRequest = 2000;
     private readonly NvdClient _client = client;

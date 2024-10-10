@@ -16,7 +16,7 @@ public abstract class OptionsBase
     protected OptionsBase()
     {
         _outputFormatOption = Add(new Option<OutputFormat>("--format", () => OutputFormat.Simple, "Set the format of the output"));
-        _limitOption = Add(new Option<int?>("--limit", "Maximum number of CVEs to include in the result"));
+        _limitOption = Add(new Option<int?>("--limit", "Maximum number of items to include in the result"));
     }
 
     public OutputFormat OutputFormat { get; set; } = OutputFormat.Simple;

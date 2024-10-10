@@ -5,7 +5,7 @@ using Valleysoft.Nvd.Client;
 
 namespace Valleysoft.NvdExplorer.Commands;
 
-internal class CpeCommand(NvdClient client, IConsole console) : CommandWithOptions<CpeOptions>("cpe", "Queries for one or more CPEs")
+internal class CpeCommand(NvdClient client, IConsole console) : CommandWithOptions<CpeOptions>("cpe", "Queries the Common Platform Enumeration (CPE) database")
 {
     private const int MaxResultsPerRequest = 10000;
     private readonly NvdClient _client = client;

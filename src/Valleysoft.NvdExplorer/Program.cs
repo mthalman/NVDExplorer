@@ -10,8 +10,8 @@ SystemConsole console = new();
 
 RootCommand rootCommand = new("CLI for querying National Vulnerability Database (NVD)")
 {
-    new CveCommand(client, console),
-    new CpeCommand(client, console)
+    new CpeCommand(client, console),
+    new CveCommand(client, console)
 };
 
 return rootCommand.Invoke(args);
